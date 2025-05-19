@@ -13,6 +13,7 @@ Sistema de autenticação e gerenciamento de usuários com controle de acesso ba
 - **TypeScript** – Tipagem estática para JavaScript
 - **JWT (JSON Web Token)** – Autenticação segura
 - **Docker** – Contêineres para desenvolvimento e deploy
+- **Swagger** – Documentação interativa da API disponível em `/docs`
 
 ### 🎨 Frontend
 - **Next.js 15 (App Router)** – Framework React full-stack
@@ -45,12 +46,25 @@ Sistema de autenticação e gerenciamento de usuários com controle de acesso ba
 
 ---
 
+## 📑 Documentação da API
+
+A documentação interativa da API é gerada com Swagger.
+
+📍 Acesse em:
+```bash
+http://localhost:3333/docs
+```
+
+---
+
 ## 🧪 Scripts Úteis
 
 ### Backend (Fastify)
 ```json
 "scripts": {
-  "start": "tsx src/server.ts",
+  "build": "tsc --project tsconfig.json",
+  "start": "node dist/server.js",
+  "start:dev": "tsx --watch src/server.ts",
   "lint": "eslint src --ext .ts --fix",
   "format": "prettier --check --ignore-path .gitignore .",
   "format:fix": "prettier --write --ignore-path .gitignore ."
@@ -90,14 +104,18 @@ docker-compose up --build
 
 ---
 
-## 🛠️ Configuração Manual
+## 🛠️ Rodando Localmente
 
 ### Backend
 ```bash
 pnpm install
-pnpm prisma generate
-pnpm prisma migrate dev
+pnpm build
 pnpm start
+```
+
+Para desenvolvimento com recarregamento automático:
+```bash
+pnpm start:dev
 ```
 
 ### Frontend
@@ -114,6 +132,7 @@ pnpm dev
 authforge/
 ├── backend/
 │   ├── src/
+│   ├── dist/
 │   └── prisma/
 ├── frontend/
 │   ├── app/
@@ -144,5 +163,9 @@ authforge/
 | /me                   | PUT    | User      |
 
 ---
+
+## 📜 Autoria
+
+Este projeto foi idealizado e desenvolvido por **Adler Castro**. Todos os direitos reservados.
 
 > Desenvolvido por Adler Castro 🧠🚀
