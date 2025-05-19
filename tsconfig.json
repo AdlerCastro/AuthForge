@@ -22,7 +22,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
+    "outDir": "./dist"
   },
   "include": ["./src/**/*", "./test/**/*", "./scripts/**/*", "./*.ts"], 
   "exclude": ["node_modules", "**/*.spec.ts", "**/*.test.ts", "**/*.e2e-spec.ts"] 
