@@ -14,7 +14,7 @@
       "@/*": ["./src/*"]
     },
     "allowJs": true,
-
+    
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -23,5 +23,7 @@
     "isolatedModules": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
-  }
+  },
+  "include": ["./src/**/*", "./test/**/*", "./scripts/**/*", "./*.ts"], 
+  "exclude": ["node_modules", "**/*.spec.ts", "**/*.test.ts", "**/*.e2e-spec.ts"] 
 }
