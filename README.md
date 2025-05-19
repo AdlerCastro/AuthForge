@@ -1,65 +1,75 @@
-# 🛡️ AuthForge
+# 🛡️ AuthForge - Backend
 
-Sistema de autenticação e gerenciamento de usuários com controle de acesso baseado em cargos (`admin` e `user`). A aplicação é composta por uma API REST desenvolvida em Node.js com Fastify no back-end e uma interface em React com Next.js no front-end.
+API REST desenvolvida com Node.js e Fastify, estruturada em **MVC** e com autenticação baseada em JWT. Este repositório contém exclusivamente o **back-end** do sistema AuthForge.
+
+🔗 A interface web (front-end) está disponível em:  
+👉 [AuthForge Frontend Repository](https://github.com/AdlerCastro/AuthForge-Frontend.git)
 
 ---
 
 ## 📦 Tecnologias Utilizadas
 
-### 🔧 Backend
-- **Fastify** – Framework web de alta performance para Node.js
-- **Prisma ORM** – ORM moderno e intuitivo para PostgreSQL
+- **Fastify** – Framework web de alta performance
+- **TypeScript** – Tipagem estática
+- **Prisma ORM** – ORM para PostgreSQL
 - **PostgreSQL** – Banco de dados relacional
-- **TypeScript** – Tipagem estática para JavaScript
-- **JWT (JSON Web Token)** – Autenticação segura
-- **Docker** – Contêineres para desenvolvimento e deploy
-- **Swagger** – Documentação interativa da API disponível em `/docs`
+- **JWT (JSON Web Token)** – Autenticação
+- **Swagger** – Documentação de rotas
+- **Docker** – Contêiner para ambiente isolado
+- **CI/CD** – Integração contínua com GitHub Actions
 
-### 🎨 Frontend
-- **Next.js 15 (App Router)** – Framework React full-stack
-- **React Query (Tanstack Query)** – Gerenciamento de dados e cache
-- **Axios** – Requisições HTTP
-- **Tailwind CSS** – Estilização utilitária
-- **JWT** – Autenticação e autorização
+---
+
+## 🧱 Arquitetura MVC
+
+A aplicação segue a estrutura **Model-View-Controller**, distribuída em:
+
+```
+
+src/
+├── controllers/
+├── models/         # Prisma ORM
+├── repositories/
+├── routes/
+├── services/
+├── views/          # (Caso necessário para e-mails, templates, etc.)
+├── server.ts       # Entry point
+
+```
 
 ---
 
 ## 🔐 Funcionalidades da API
 
 ### 📌 Autenticação
-- `POST /sign-in`: Login com e-mail e senha, retorna token JWT
-- `POST /sign-out`: Cadastro de usuário com:
-  - Email
-  - Senha
-  - Endereço
-  - Telefone
-  - RG
-  - Data de nascimento
+- `POST /sign-in`: Login e geração de token
+- `POST /sign-out`: Cadastro de novo usuário (email, senha, endereço, telefone, RG, data de nascimento)
 
 ### 👤 Usuários
-- `GET /users`: Lista todos os usuários (admin)
-- `GET /users/:id`: Busca um usuário pelo ID
-- `POST /users`: Criação de usuário (admin)
-- `PUT /users/:id`: Atualização de usuário (admin)
-- `PUT /me`: Atualização dos próprios dados (user)
-- Cargos: `admin`, `user` (com controle de permissões)
+- `GET /users`: Listagem de todos os usuários (admin)
+- `GET /users/:id`: Buscar usuário pelo ID (admin)
+- `POST /users`: Criar novo usuário (admin)
+- `PUT /users/:id`: Atualizar usuário (admin)
+- `PUT /me`: Usuário atualiza seus próprios dados
+
+🛡️ Cargos: `admin` e `user` (com controle de permissões)
 
 ---
 
 ## 📑 Documentação da API
 
-A documentação interativa da API é gerada com Swagger.
+Acesse a documentação interativa no Swagger em:
 
-📍 Acesse em:
-```bash
-http://localhost:3333/docs
 ```
+
+[http://localhost:3333/docs](http://localhost:3333/docs)
+
+````
 
 ---
 
-## 🧪 Scripts Úteis
+## 📜 Scripts
 
-### Backend (Fastify)
 ```json
 "scripts": {
   "build": "tsc --project tsconfig.json",
@@ -69,98 +79,63 @@ http://localhost:3333/docs
   "format": "prettier --check --ignore-path .gitignore .",
   "format:fix": "prettier --write --ignore-path .gitignore ."
 }
-```
-
-### Frontend (Next.js)
-```json
-"scripts": {
-  "dev": "next dev --turbopack",
-  "build": "next build",
-  "start": "next start",
-  "lint": "next lint",
-  "format": "prettier --check --ignore-path .gitignore .",
-  "format:fix": "prettier --write --ignore-path .gitignore ."
-}
-```
+````
 
 ---
 
-## 🐳 Rodando o Projeto com Docker
+## 🐳 Rodando com Docker
 
-### 1. Clone o repositório
-```bash
-git clone https://github.com/seu-usuario/authforge.git
-cd authforge
-```
+### 1. Configure seu `.env` com base no `.env.example`
 
-### 2. Crie o arquivo `.env` com as variáveis necessárias (exemplo no `.env.example`)
+### 2. Inicie os containers:
 
-### 3. Suba os containers
 ```bash
 docker-compose up --build
 ```
 
-> Isso irá iniciar tanto o backend quanto o banco de dados PostgreSQL.
-
 ---
 
-## 🛠️ Rodando Localmente
+## 💻 Rodando Localmente (sem Docker)
 
-### Backend
+### Instale as dependências:
+
 ```bash
 pnpm install
-pnpm build
-pnpm start
 ```
 
-Para desenvolvimento com recarregamento automático:
+### Execute em modo desenvolvimento:
+
 ```bash
 pnpm start:dev
 ```
 
-### Frontend
+### Compilação para produção:
+
 ```bash
-pnpm install
-pnpm dev
+pnpm build
+pnpm start
 ```
 
 ---
 
-## 📁 Estrutura de Pastas
+## ✅ Requisitos
 
-```
-authforge/
-├── backend/
-│   ├── src/
-│   ├── dist/
-│   └── prisma/
-├── frontend/
-│   ├── app/
-│   └── components/
-```
+* Node.js `>= 18.18.0`
+* PNPM `>= 9.6.0`
+* PostgreSQL local ou via Docker
+* Prisma configurado (`pnpm prisma migrate dev`)
 
 ---
 
-## 🚀 Requisitos
+## ⚙️ CI com GitHub Actions
 
-- Node.js `>= 18.18.0`
-- PNPM `>= 9.6.0`
-- Docker (para uso com contêineres)
-- PostgreSQL (caso opte por rodar local sem Docker)
+Este projeto utiliza **CI automática** via GitHub Actions para verificar:
 
----
+* Formatação com Prettier
+* Análise estática com ESLint
+* Compilação com TypeScript
 
-## 🛡️ Controle de Acesso
-
-| Rota                  | Método | Acesso    |
-|-----------------------|--------|-----------|
-| /sign-in              | POST   | Público   |
-| /sign-out             | POST   | Público   |
-| /users                | GET    | Admin     |
-| /users/:id            | GET    | Admin     |
-| /users                | POST   | Admin     |
-| /users/:id            | PUT    | Admin     |
-| /me                   | PUT    | User      |
+Arquivo de workflow: `.github/workflows/ci.yml`
 
 ---
 
