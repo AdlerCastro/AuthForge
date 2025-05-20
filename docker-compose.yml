@@ -1,0 +1,26 @@
+version: '3.9'
+
+services:
+  db:
+    container_name: authforge-db
+    image: bitnami/postgresql
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_USER=authforge
+      - POSTGRES_PASSWORD=authforge-password
+      - POSTGRES_DB=authforge-db
+    volumes:
+      - ./apps/postgres:/var/lib/postgresql/data
+
+  backend:
+    depends_on:
+      - db
+    image: authforge-backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3333:3333'
+volumes:
+  db:
