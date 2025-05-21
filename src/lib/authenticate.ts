@@ -10,6 +10,12 @@ export async function Authenticate(req: FastifyRequest, res: FastifyReply) {
       message: 'Token não encontrado',
     });
   }
-  const decoded = req.jwt.verify<FastifyJWT['user']>(token);
-  req.user = decoded;
+  try {
+    const decoded = req.jwt.verify<FastifyJWT['user']>(token);
+    req.user = decoded;
+  } catch (error) {
+    return res
+      .status(401)
+      .send({ success: false, message: 'Token inválido. Error ' + error });
+  }
 }
