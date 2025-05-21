@@ -4,33 +4,65 @@ import { UpdateSchemaType } from '@/schemas/update.schema';
 import { hashPassword } from '@/utils/hashPassword';
 
 export const userModel = {
-  findAll: () => prisma.user.findMany(),
+  findAll: () =>
+    prisma.user.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        created_at: true,
+        RG: true,
+        phone: true,
+        address: true,
+        birth_date: true,
+      },
+    }),
 
-  findById: (id: string) => prisma.user.findUnique({ where: { id: id } }),
+  findById: (id: string) =>
+    prisma.user.findUnique({
+      where: { id: id },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        created_at: true,
+        RG: true,
+        phone: true,
+        address: true,
+        birth_date: true,
+      },
+    }),
 
-  update: async (
-    id: string,
-    { name, email, password_hash }: UpdateSchemaType,
-  ) => {
+  update: async (id: string, data: UpdateSchemaType) => {
+    const { password_hash } = data;
+
+    if (!password_hash) {
+      return prisma.user.update({
+        where: { id },
+        data: {
+          ...data,
+        },
+      });
+    }
+
     return prisma.user.update({
       where: { id },
       data: {
-        name,
-        email,
-        password_hash: password_hash
-          ? await hashPassword(password_hash)
-          : password_hash,
+        ...data,
+        password_hash: await hashPassword(password_hash),
       },
     });
   },
 
-  create: async ({ name, email, password_hash, role }: RegisterSchemaType) => {
+  create: async (data: RegisterSchemaType) => {
+    const { password_hash } = data;
+
     return prisma.user.create({
       data: {
-        name,
-        email,
+        ...data,
         password_hash: await hashPassword(password_hash),
-        role,
       },
     });
   },

@@ -4,32 +4,34 @@ import { UpdateSchemaType } from '@/schemas/update.schema';
 import { hashPassword } from '@/utils/hashPassword';
 
 export const adminModel = {
-  create: async ({ name, email, password_hash, role }: RegisterSchemaType) => {
+  create: async (data: RegisterSchemaType) => {
+    const { password_hash } = data;
+
     return prisma.user.create({
       data: {
-        name,
-        email,
-        password_hash: password_hash
-          ? await hashPassword(password_hash)
-          : password_hash,
-        role,
+        ...data,
+        password_hash: await hashPassword(password_hash),
       },
     });
   },
 
-  update: async (
-    id: string,
-    { name, email, password_hash, role }: UpdateSchemaType,
-  ) => {
+  update: async (id: string, data: UpdateSchemaType) => {
+    const { password_hash } = data;
+
+    if (!password_hash) {
+      return prisma.user.update({
+        where: { id },
+        data: {
+          ...data,
+        },
+      });
+    }
+
     return prisma.user.update({
       where: { id },
       data: {
-        name,
-        email,
-        password_hash: password_hash
-          ? await hashPassword(password_hash)
-          : password_hash,
-        role,
+        ...data,
+        password_hash: await hashPassword(password_hash),
       },
     });
   },
