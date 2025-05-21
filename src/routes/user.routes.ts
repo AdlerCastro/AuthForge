@@ -1,5 +1,5 @@
 import { FastifyTypeInstance } from '@/types/fastifyInstance.type';
-import { userController } from '@/controller/user.controller';
+import { userController } from '@/controllers/user.controller';
 import { UserSchema } from '@/schemas/user.schema';
 import {
   errorResponseSchema,
