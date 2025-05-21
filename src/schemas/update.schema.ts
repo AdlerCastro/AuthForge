@@ -18,6 +18,16 @@ export const updateSchema = z
       .default('USER')
       .describe('User role')
       .optional(),
+
+    RG: z
+      .string()
+      .min(6, 'The RG is less than 6 characters')
+      .max(6, 'The RG is more than 6 characters')
+      .optional()
+      .describe('User RG'),
+    phone: z.string().optional().describe('User phone'),
+    address: z.string().optional().describe('User address'),
+    birth_date: z.coerce.date().optional().describe('User birth date'),
   })
   .describe('User created');
 
