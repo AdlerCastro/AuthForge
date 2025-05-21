@@ -24,6 +24,6 @@
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist"
   },
-  "include": ["./src/**/*", "./test/**/*", "./scripts/**/*", "./*.ts"], 
+  "include": ["./src/**/*", "prisma","./test/**/*", "./scripts/**/*", "./*.ts"], 
   "exclude": ["node_modules", "**/*.spec.ts", "**/*.test.ts", "**/*.e2e-spec.ts"] 
 }
