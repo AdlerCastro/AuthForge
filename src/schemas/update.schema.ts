@@ -8,7 +8,11 @@ export const updateSchema = z
       .optional()
       .describe('User name'),
     email: z.string().email().describe('User email').optional(),
-    password_hash: z.string().describe('User password hash').optional(),
+    password_hash: z
+      .string()
+      .min(6, 'The password is less than 6 characters')
+      .describe('User password hash')
+      .optional(),
     role: z
       .enum(['USER', 'ADMIN'])
       .default('USER')
