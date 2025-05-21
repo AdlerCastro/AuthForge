@@ -14,6 +14,10 @@ async function main() {
       email: 'JohnDoe@example.com',
       password_hash: hashedPassword,
       role: 'ADMIN',
+      RG: '123456789',
+      address: 'Rua Exemplo, 123',
+      phone: '1234567890',
+      birth_date: new Date('2000-01-01'),
     },
   });
 
