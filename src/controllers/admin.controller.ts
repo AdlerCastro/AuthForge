@@ -6,16 +6,9 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 export const adminController = {
   create: async (req: FastifyRequest, res: FastifyReply) => {
     try {
-      const { name, email, password_hash, role } = registerSchema.parse(
-        req.body,
-      );
+      const data = registerSchema.parse(req.body);
 
-      await adminService.create({
-        name,
-        email,
-        password_hash,
-        role,
-      });
+      await adminService.create(data);
 
       return res.status(201).send({
         success: true,
@@ -41,14 +34,9 @@ export const adminController = {
     }
 
     try {
-      const { name, email, password_hash, role } = updateSchema.parse(req.body);
+      const data = updateSchema.parse(req.body);
 
-      await adminService.update(id, {
-        name,
-        email,
-        password_hash,
-        role,
-      });
+      await adminService.update(id, data);
 
       return res.status(200).send({
         success: true,

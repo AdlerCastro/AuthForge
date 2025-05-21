@@ -12,16 +12,13 @@ export const userService = {
     return user;
   },
 
-  update: async (
-    id: string,
-    { name, email, password_hash }: UpdateSchemaType,
-  ) => {
-    const user = await userModel.update(id, { name, email, password_hash });
+  update: async (id: string, data: UpdateSchemaType) => {
+    const user = await userModel.update(id, data);
     return user;
   },
 
-  create: async ({ name, email, password_hash, role }: RegisterSchemaType) => {
-    const user = await userModel.create({ name, email, password_hash, role });
+  create: async (data: RegisterSchemaType) => {
+    const user = await userModel.create(data);
     return user;
   },
 };

@@ -67,14 +67,9 @@ export const userController = {
   },
 
   create: async (req: FastifyRequest, res: FastifyReply) => {
-    const { name, email, password_hash, role } = registerSchema.parse(req.body);
+    const data = registerSchema.parse(req.body);
     try {
-      await userService.create({
-        name,
-        email,
-        password_hash,
-        role,
-      });
+      await userService.create(data);
 
       return res.status(201).send({
         success: true,
