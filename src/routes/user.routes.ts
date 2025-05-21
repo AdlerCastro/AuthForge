@@ -12,6 +12,7 @@ export async function userRoutes(app: FastifyTypeInstance) {
   app.get(
     '/users',
     {
+      preHandler: [app.authenticate],
       schema: {
         tags: ['users'],
         description: 'Get all users',
@@ -26,6 +27,7 @@ export async function userRoutes(app: FastifyTypeInstance) {
   app.get(
     '/users/:id',
     {
+      preHandler: [app.authenticate],
       schema: {
         description: 'Get a user by ID',
         tags: ['users'],
@@ -44,6 +46,7 @@ export async function userRoutes(app: FastifyTypeInstance) {
   app.patch(
     '/users/:id',
     {
+      preHandler: [app.authenticate],
       schema: {
         description: 'Update a user',
         tags: ['users'],
