@@ -35,6 +35,15 @@ export const userController = {
   update: async (req: FastifyRequest, res: FastifyReply) => {
     const { id } = req.params as { id: string };
 
+    const authUser = req.user;
+
+    if (authUser.role !== 'ADMIN' && authUser.id !== id) {
+      return res.status(403).send({
+        success: false,
+        message: 'Você não tem permissão para editar este usuário.',
+      });
+    }
+
     try {
       const { name, email, password_hash } = updateSchema.parse(req.body);
 
