@@ -46,7 +46,7 @@ export async function userRoutes(app: FastifyTypeInstance) {
     {
       schema: {
         description: 'Update a user',
-        tags: ['admin'],
+        tags: ['users'],
         params: z.object({
           id: z.string().describe('User ID'),
         }),
