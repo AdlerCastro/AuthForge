@@ -1,3 +1,4 @@
+import { registerSchema } from '@/schemas/register.schema';
 import { updateSchema } from '@/schemas/update.schema';
 import { userService } from '@/services/user.service';
 import { FastifyReply, FastifyRequest } from 'fastify';
@@ -51,6 +52,29 @@ export const userController = {
       return res.status(400).send({
         success: false,
         message: 'Erro ao atualizar o usuário',
+        error: error instanceof Error ? error.message : String(error),
+      });
+    }
+  },
+
+  create: async (req: FastifyRequest, res: FastifyReply) => {
+    const { name, email, password_hash, role } = registerSchema.parse(req.body);
+    try {
+      await userService.create({
+        name,
+        email,
+        password_hash,
+        role,
+      });
+
+      return res.status(201).send({
+        success: true,
+        message: 'Usuário criado com sucesso',
+      });
+    } catch (error) {
+      return res.status(400).send({
+        success: false,
+        message: 'Erro ao criar o usuário',
         error: error instanceof Error ? error.message : String(error),
       });
     }

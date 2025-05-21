@@ -7,6 +7,7 @@ import {
 } from '@/schemas/response.schema';
 import z from 'zod';
 import { updateSchema } from '@/schemas/update.schema';
+import { registerSchema } from '@/schemas/register.schema';
 
 export async function userRoutes(app: FastifyTypeInstance) {
   app.get(
@@ -61,5 +62,21 @@ export async function userRoutes(app: FastifyTypeInstance) {
       },
     },
     userController.update,
+  );
+
+  app.post(
+    '/register',
+    {
+      schema: {
+        description: 'Sign up a new user',
+        tags: ['sign-up'],
+        body: registerSchema,
+        response: {
+          201: successResponseSchema,
+          400: errorResponseSchema,
+        },
+      },
+    },
+    userController.create,
   );
 }

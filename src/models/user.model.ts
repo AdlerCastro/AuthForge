@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma';
+import { RegisterSchemaType } from '@/schemas/register.schema';
 import { UpdateSchemaType } from '@/schemas/update.schema';
 import { hashPassword } from '@/utils/hashPassword';
 
@@ -19,6 +20,17 @@ export const userModel = {
         password_hash: password_hash
           ? await hashPassword(password_hash)
           : password_hash,
+      },
+    });
+  },
+
+  create: async ({ name, email, password_hash, role }: RegisterSchemaType) => {
+    return prisma.user.create({
+      data: {
+        name,
+        email,
+        password_hash: await hashPassword(password_hash),
+        role,
       },
     });
   },

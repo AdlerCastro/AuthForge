@@ -1,4 +1,5 @@
 import { userModel } from '@/models/user.model';
+import { RegisterSchemaType } from '@/schemas/register.schema';
 import { UpdateSchemaType } from '@/schemas/update.schema';
 
 export const userService = {
@@ -16,6 +17,11 @@ export const userService = {
     { name, email, password_hash }: UpdateSchemaType,
   ) => {
     const user = await userModel.update(id, { name, email, password_hash });
+    return user;
+  },
+
+  create: async ({ name, email, password_hash, role }: RegisterSchemaType) => {
+    const user = await userModel.create({ name, email, password_hash, role });
     return user;
   },
 };
