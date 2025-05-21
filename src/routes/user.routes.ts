@@ -18,7 +18,9 @@ export async function userRoutes(app: FastifyTypeInstance) {
         tags: ['users'],
         description: 'Get all users',
         response: {
-          200: z.array(UserSchema).describe('List of users'),
+          200: z
+            .array(UserSchema.omit({ password_hash: true }))
+            .describe('List of users'),
         },
       },
     },
@@ -36,7 +38,7 @@ export async function userRoutes(app: FastifyTypeInstance) {
           id: z.string().describe('User ID'),
         }),
         response: {
-          200: UserSchema,
+          200: UserSchema.omit({ password_hash: true }),
           400: errorResponseSchema,
         },
       },
