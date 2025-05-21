@@ -7,6 +7,7 @@ import fastifySwaggerUi from '@fastify/swagger-ui';
 import { jsonSchemaTransform } from 'fastify-type-provider-zod';
 import { userRoutes } from '@/routes/user.routes';
 import { env } from './config/env.config';
+import { adminRoutes } from './routes/admin.routes';
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
@@ -30,7 +31,7 @@ app.register(fastifySwaggerUi, {
   routePrefix: '/docs',
 });
 
-app.register(userRoutes);
+app.register(userRoutes, adminRoutes);
 
 app.listen({ port: env.PORT }).then(() => {
   console.log('HTTP server running on http://localhost:3333');
