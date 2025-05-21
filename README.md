@@ -29,10 +29,8 @@ A aplicação segue a estrutura **Model-View-Controller**, distribuída em:
 src/
 ├── controllers/
 ├── models/         # Prisma ORM
-├── repositories/
 ├── routes/
 ├── services/
-├── views/          # (Caso necessário para e-mails, templates, etc.)
 ├── server.ts       # Entry point
 
 ```

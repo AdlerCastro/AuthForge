@@ -1,19 +1,17 @@
 import { fastify } from 'fastify';
 import { fastifyCors } from '@fastify/cors';
-import {
-  validatorCompiler,
-  serializerCompiler,
-  ZodTypeProvider,
-  jsonSchemaTransform,
-} from 'fastify-type-provider-zod';
+import { ZodTypeProvider } from 'fastify-type-provider-zod';
+import { registerZodCompiler } from './utils/zodCompiler';
 import fastifySwagger from '@fastify/swagger';
 import fastifySwaggerUi from '@fastify/swagger-ui';
-import { routes } from './routes';
+import { jsonSchemaTransform } from 'fastify-type-provider-zod';
+import { userRoutes } from '@/routes/user.routes';
+import { env } from './config/env.config';
+import { adminRoutes } from './routes/admin.routes';
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
-app.setValidatorCompiler(validatorCompiler);
-app.setSerializerCompiler(serializerCompiler);
+registerZodCompiler(app);
 
 app.register(fastifyCors, {
   origin: '*',
@@ -33,8 +31,8 @@ app.register(fastifySwaggerUi, {
   routePrefix: '/docs',
 });
 
-app.register(routes);
+app.register(userRoutes, adminRoutes);
 
-app.listen({ port: 3333 }).then(() => {
-  console.log('HTTP server running!');
+app.listen({ port: env.PORT }).then(() => {
+  console.log('HTTP server running on http://localhost:3333');
 });
