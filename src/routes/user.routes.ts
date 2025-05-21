@@ -7,11 +7,13 @@ import {
 } from '@/schemas/response.schema';
 import z from 'zod';
 import { updateSchema } from '@/schemas/update.schema';
+import { registerSchema } from '@/schemas/register.schema';
 
 export async function userRoutes(app: FastifyTypeInstance) {
   app.get(
     '/users',
     {
+      preHandler: [app.authenticate],
       schema: {
         tags: ['users'],
         description: 'Get all users',
@@ -26,6 +28,7 @@ export async function userRoutes(app: FastifyTypeInstance) {
   app.get(
     '/users/:id',
     {
+      preHandler: [app.authenticate],
       schema: {
         description: 'Get a user by ID',
         tags: ['users'],
@@ -44,9 +47,10 @@ export async function userRoutes(app: FastifyTypeInstance) {
   app.patch(
     '/users/:id',
     {
+      preHandler: [app.authenticate],
       schema: {
         description: 'Update a user',
-        tags: ['admin'],
+        tags: ['users'],
         params: z.object({
           id: z.string().describe('User ID'),
         }),
@@ -58,5 +62,21 @@ export async function userRoutes(app: FastifyTypeInstance) {
       },
     },
     userController.update,
+  );
+
+  app.post(
+    '/register',
+    {
+      schema: {
+        description: 'Sign up a new user',
+        tags: ['sign-up'],
+        body: registerSchema,
+        response: {
+          201: successResponseSchema,
+          400: errorResponseSchema,
+        },
+      },
+    },
+    userController.create,
   );
 }

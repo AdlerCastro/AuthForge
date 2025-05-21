@@ -62,4 +62,30 @@ export const adminController = {
       });
     }
   },
+
+  delete: async (req: FastifyRequest, res: FastifyReply) => {
+    const { id } = req.params as { id: string };
+
+    if (!id) {
+      return res.status(400).send({
+        success: false,
+        message: 'ID do usuário não informado',
+      });
+    }
+
+    try {
+      await adminService.delete(id);
+
+      return res.status(200).send({
+        success: true,
+        message: 'Usuário deletado',
+      });
+    } catch (error) {
+      return res.status(400).send({
+        success: false,
+        message: 'Erro ao deletar usuário',
+        error: error instanceof Error ? error.message : String(error),
+      });
+    }
+  },
 };

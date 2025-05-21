@@ -12,4 +12,8 @@ export const adminService = {
   ) => {
     await adminModel.update(id, { name, email, password_hash, role });
   },
+
+  delete: async (id: string) => {
+    await adminModel.delete(id);
+  },
 };
