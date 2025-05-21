@@ -12,6 +12,7 @@ export async function adminRoutes(app: FastifyTypeInstance) {
   app.post(
     '/admin',
     {
+      preHandler: [app.authenticate],
       schema: {
         description: 'Create a new user',
         tags: ['admin'],
@@ -28,6 +29,7 @@ export async function adminRoutes(app: FastifyTypeInstance) {
   app.patch(
     '/admin/:id',
     {
+      preHandler: [app.authenticate],
       schema: {
         description: 'Update a user',
         tags: ['admin'],
@@ -42,5 +44,24 @@ export async function adminRoutes(app: FastifyTypeInstance) {
       },
     },
     adminController.update,
+  );
+
+  app.delete(
+    '/admin/:id',
+    {
+      preHandler: [app.authenticate],
+      schema: {
+        description: 'Delete a user',
+        tags: ['admin'],
+        params: z.object({
+          id: z.string().describe('User ID'),
+        }),
+        response: {
+          200: successResponseSchema,
+          400: errorResponseSchema,
+        },
+      },
+    },
+    adminController.delete,
   );
 }
