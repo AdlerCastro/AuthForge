@@ -10,7 +10,7 @@ import { env } from './config/env.config';
 import { adminRoutes } from './routes/admin.routes';
 import fastifyJwt from '@fastify/jwt';
 import fCookie from '@fastify/cookie';
-import { Authenticate } from './lib/authenticate';
+import { Authenticate } from './middleware/authenticate';
 import { loginRoute } from './routes/login.route';
 import { logoutRoute } from './routes/logout.route';
 
