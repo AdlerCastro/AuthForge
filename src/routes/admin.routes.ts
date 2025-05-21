@@ -1,4 +1,5 @@
 import { adminController } from '@/controllers/admin.controller';
+import { checkRole } from '@/middleware/checkRole';
 import { registerSchema } from '@/schemas/register.schema';
 import {
   successResponseSchema,
@@ -12,7 +13,7 @@ export async function adminRoutes(app: FastifyTypeInstance) {
   app.post(
     '/admin',
     {
-      preHandler: [app.authenticate],
+      preHandler: [app.authenticate, checkRole('ADMIN')],
       schema: {
         description: 'Create a new user',
         tags: ['admin'],
@@ -29,7 +30,7 @@ export async function adminRoutes(app: FastifyTypeInstance) {
   app.patch(
     '/admin/:id',
     {
-      preHandler: [app.authenticate],
+      preHandler: [app.authenticate, checkRole('ADMIN')],
       schema: {
         description: 'Update a user',
         tags: ['admin'],
@@ -49,7 +50,7 @@ export async function adminRoutes(app: FastifyTypeInstance) {
   app.delete(
     '/admin/:id',
     {
-      preHandler: [app.authenticate],
+      preHandler: [app.authenticate, checkRole('ADMIN')],
       schema: {
         description: 'Delete a user',
         tags: ['admin'],
