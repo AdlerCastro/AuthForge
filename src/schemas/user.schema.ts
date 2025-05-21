@@ -12,3 +12,17 @@ export const UserSchema = registerSchema
   .describe('User');
 
 export type UserSchemaType = z.infer<typeof UserSchema>;
+
+export const PublicUserSchema = z.object({
+  id: z.string().uuid(),
+  name: z.string(),
+  email: z.string().email(),
+  role: z.enum(['USER', 'ADMIN']),
+  RG: z.string(),
+  phone: z.string(),
+  address: z.string(),
+  birth_date: z.date(),
+  created_at: z.date(),
+});
+
+export const PublicUserArraySchema = z.array(PublicUserSchema);
