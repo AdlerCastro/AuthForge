@@ -33,4 +33,10 @@ export const adminModel = {
       },
     });
   },
+
+  delete: async (id: string) => {
+    return prisma.user.delete({
+      where: { id },
+    });
+  },
 };
