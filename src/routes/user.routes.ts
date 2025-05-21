@@ -1,6 +1,6 @@
 import { FastifyTypeInstance } from '@/types/fastifyInstance.type';
 import { userController } from '@/controllers/user.controller';
-import { UserSchema } from '@/schemas/user.schema';
+import { PublicUserArraySchema, PublicUserSchema } from '@/schemas/user.schema';
 import {
   errorResponseSchema,
   successResponseSchema,
@@ -18,9 +18,7 @@ export async function userRoutes(app: FastifyTypeInstance) {
         tags: ['users'],
         description: 'Get all users',
         response: {
-          200: z
-            .array(UserSchema.omit({ password_hash: true }))
-            .describe('List of users'),
+          200: PublicUserArraySchema.describe('List of users'),
         },
       },
     },
@@ -38,7 +36,7 @@ export async function userRoutes(app: FastifyTypeInstance) {
           id: z.string().describe('User ID'),
         }),
         response: {
-          200: UserSchema.omit({ password_hash: true }),
+          200: PublicUserSchema.describe('User'),
           400: errorResponseSchema,
         },
       },
