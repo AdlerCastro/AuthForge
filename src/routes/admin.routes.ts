@@ -1,4 +1,4 @@
-import { adminController } from '@/controller/admin.controller';
+import { adminController } from '@/controllers/admin.controller';
 import { registerSchema } from '@/schemas/register.schema';
 import {
   successResponseSchema,
