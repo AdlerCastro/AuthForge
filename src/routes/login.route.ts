@@ -1,8 +1,10 @@
 import { loginController } from '@/controllers/login.controller';
 import { loginSchema } from '@/schemas/login.schema';
-import { errorResponseSchema } from '@/schemas/response.schema';
+import {
+  errorResponseSchema,
+  successResponseSchema,
+} from '@/schemas/response.schema';
 import { FastifyTypeInstance } from '@/types/fastifyInstance.type';
-import z from 'zod';
 
 export async function loginRoute(app: FastifyTypeInstance) {
   app.post(
@@ -13,11 +15,7 @@ export async function loginRoute(app: FastifyTypeInstance) {
         description: 'Login user',
         body: loginSchema,
         response: {
-          201: z
-            .object({
-              accessToken: z.string().describe('Access token'),
-            })
-            .describe('Login success'),
+          201: successResponseSchema,
           401: errorResponseSchema,
           400: errorResponseSchema,
         },
