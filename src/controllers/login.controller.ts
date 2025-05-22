@@ -1,7 +1,7 @@
-import { Role } from '@/enum/role.enum';
 import { loginSchema } from '@/schemas/login.schema';
 import { loginService } from '@/services/login.service';
 import { User } from '@/types/user.type';
+
 import { FastifyReply, FastifyRequest } from 'fastify';
 
 export const loginController = {
@@ -33,7 +33,7 @@ export const loginController = {
         id: user.id,
         name: user.name,
         email: user.email,
-        role: user.role as Role,
+        role: user.role,
       };
 
       const token = req.jwt.sign(payload);
