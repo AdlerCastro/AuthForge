@@ -13,6 +13,7 @@ import fCookie from '@fastify/cookie';
 import { Authenticate } from './middleware/authenticate';
 import { loginRoute } from './routes/login.route';
 import { logoutRoute } from './routes/logout.route';
+import { meRoute } from './routes/me.route';
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
@@ -56,7 +57,8 @@ app.register(userRoutes);
 app.register(adminRoutes);
 app.register(loginRoute);
 app.register(logoutRoute);
+app.register(meRoute);
 
-app.listen({ port: env.PORT }).then(() => {
-  console.log('HTTP server running on http://localhost:3333');
+app.listen({ port: env.PORT, host: '0.0.0.0' }).then(() => {
+  console.log(`HTTP server running on port: ${env.PORT}`);
 });
