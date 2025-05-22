@@ -1,3 +1,4 @@
+import { env } from '@/config/env.config';
 import { loginSchema } from '@/schemas/login.schema';
 import { loginService } from '@/services/login.service';
 import { User } from '@/types/user.type';
@@ -43,10 +44,10 @@ export const loginController = {
         .setCookie('access_token', token, {
           path: '/',
           httpOnly: true,
-          secure: true,
+          secure: env.NODE_ENV === 'production',
+          sameSite: 'lax',
         })
         .send({
-          accessToken: token,
           success: true,
           message: 'Login realizado com sucesso',
         });
