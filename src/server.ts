@@ -36,7 +36,8 @@ app.register(fCookie, {
 app.decorate('authenticate', Authenticate);
 
 app.register(fastifyCors, {
-  origin: '*',
+  origin: [env.FRONTEND_URL],
+  credentials: true,
 });
 
 app.register(fastifySwagger, {
