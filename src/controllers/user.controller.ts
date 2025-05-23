@@ -45,12 +45,12 @@ export const userController = {
     }
 
     try {
-      const { name, email, password_hash } = updateSchema.parse(req.body);
+      const { name, email, password } = updateSchema.parse(req.body);
 
       await userService.update(id, {
         name,
         email,
-        password_hash,
+        password,
       });
 
       return res.status(201).send({

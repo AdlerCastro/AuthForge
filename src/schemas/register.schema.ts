@@ -7,7 +7,7 @@ export const registerSchema = z
       .min(3, 'The name is less than 3 letters')
       .describe('User name'),
     email: z.string().email().describe('User email'),
-    password_hash: z
+    password: z
       .string()
       .min(6, 'The password is less than 6 characters')
       .describe('User password hash'),
