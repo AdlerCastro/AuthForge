@@ -2,7 +2,13 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 
 export async function Authenticate(req: FastifyRequest, res: FastifyReply) {
   try {
-    const token = req.cookies.access_token;
+    // Primeiro tenta pegar do cookie
+    let token = req.cookies.access_token;
+
+    // Se não tiver no cookie, tenta pegar do header
+    if (!token && req.headers.authorization?.startsWith('Bearer ')) {
+      token = req.headers.authorization.split(' ')[1];
+    }
 
     if (!token) {
       return res.status(401).send({
