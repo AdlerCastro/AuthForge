@@ -4,7 +4,7 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 export const meController = {
   getMe: async (req: FastifyRequest, res: FastifyReply) => {
     try {
-      const user = userService.getById(req.user.id);
+      const user = await userService.getById(req.user.id);
 
       if (!user) {
         return res.status(401).send({
