@@ -75,9 +75,24 @@ Acesse a documentação interativa no Swagger em:
   "start:dev": "tsx --watch src/server.ts",
   "lint": "eslint src --ext .ts --fix",
   "format": "prettier --check --ignore-path .gitignore .",
-  "format:fix": "prettier --write --ignore-path .gitignore ."
+  "format:fix": "prettier --write --ignore-path .gitignore .",
+  "seed": "tsx prisma/seed.ts"
 }
 ````
+
+---
+
+## ▶️ Primeiros passos
+
+O login com a conta de administrador de exemplo pode ser feito após usar o comando
+
+```
+pnpm seed
+````
+
+As credenciais dessa conta são:
+- `EMAIL`: JohnDoe@example.com
+- `PASSWORD`: abcd1234
 
 ---
 
