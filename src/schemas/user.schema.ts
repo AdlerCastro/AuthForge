@@ -26,3 +26,9 @@ export const PublicUserSchema = z.object({
 });
 
 export const PublicUserArraySchema = z.array(PublicUserSchema);
+
+export const PublicUserResponseSchema = z.object({
+  success: z.literal(true),
+  message: z.string(),
+  data: PublicUserSchema,
+});
