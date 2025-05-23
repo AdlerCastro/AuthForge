@@ -36,13 +36,13 @@ export const userModel = {
     }),
 
   update: async (id: string, data: UpdateSchemaType) => {
-    const { password_hash } = data;
+    const { password, ...rest } = data;
 
-    if (!password_hash) {
+    if (!password) {
       return prisma.user.update({
         where: { id },
         data: {
-          ...data,
+          ...rest,
         },
       });
     }
@@ -51,18 +51,18 @@ export const userModel = {
       where: { id },
       data: {
         ...data,
-        password_hash: await hashPassword(password_hash),
+        password_hash: await hashPassword(password),
       },
     });
   },
 
   create: async (data: RegisterSchemaType) => {
-    const { password_hash } = data;
+    const { password, ...rest } = data;
 
     return prisma.user.create({
       data: {
-        ...data,
-        password_hash: await hashPassword(password_hash),
+        ...rest,
+        password_hash: await hashPassword(password),
       },
     });
   },

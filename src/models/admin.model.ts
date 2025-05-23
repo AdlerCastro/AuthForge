@@ -5,24 +5,24 @@ import { hashPassword } from '@/utils/hashPassword';
 
 export const adminModel = {
   create: async (data: RegisterSchemaType) => {
-    const { password_hash } = data;
+    const { password, ...rest } = data;
 
     return prisma.user.create({
       data: {
-        ...data,
-        password_hash: await hashPassword(password_hash),
+        ...rest,
+        password_hash: await hashPassword(password),
       },
     });
   },
 
   update: async (id: string, data: UpdateSchemaType) => {
-    const { password_hash } = data;
+    const { password, ...rest } = data;
 
-    if (!password_hash) {
+    if (!password) {
       return prisma.user.update({
         where: { id },
         data: {
-          ...data,
+          ...rest,
         },
       });
     }
@@ -30,8 +30,8 @@ export const adminModel = {
     return prisma.user.update({
       where: { id },
       data: {
-        ...data,
-        password_hash: await hashPassword(password_hash),
+        ...rest,
+        password_hash: await hashPassword(password),
       },
     });
   },
