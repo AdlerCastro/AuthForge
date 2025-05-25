@@ -1,128 +1,125 @@
-# 🛡️ AuthForge - Backend
+# 🛡️ AuthForge — Backend
 
-API REST desenvolvida com Node.js e Fastify, estruturada em **MVC** e com autenticação baseada em JWT. Este repositório contém exclusivamente o **back-end** do sistema AuthForge.
+Sistema de autenticação e gerenciamento de usuários baseado em **Fastify**, estruturado com **MVC**, autenticação via **JWT**, persistência com **Prisma ORM**, e infraestrutura escalável com **Docker** e **PostgreSQL**.
 
-🔗 A interface web (front-end) está disponível em:  
+🔗 Frontend disponível em:  
 👉 [AuthForge Frontend Repository](https://github.com/AdlerCastro/AuthForge-Frontend.git)
 
 ---
 
 ## 📦 Tecnologias Utilizadas
 
-- **Fastify** – Framework web de alta performance
-- **TypeScript** – Tipagem estática
-- **Prisma ORM** – ORM para PostgreSQL
-- **PostgreSQL** – Banco de dados relacional
-- **JWT (JSON Web Token)** – Autenticação
-- **Swagger** – Documentação de rotas
-- **Docker** – Contêiner para ambiente isolado
-- **CI/CD** – Integração contínua com GitHub Actions
+- **Node.js + Fastify** – Backend performático e modular
+- **TypeScript** – Tipagem estática segura
+- **Prisma ORM** – ORM moderno para PostgreSQL
+- **PostgreSQL** – Banco relacional robusto
+- **Zod** – Validações de entrada com schema
+- **JWT** – Autenticação segura via token
+- **Swagger** – Documentação automatizada da API
+- **Docker** – Contêiner de aplicação e banco de dados
+- **ESLint + Prettier** – Padrão e qualidade de código
+- **CI/CD (GitHub Actions)** – Integração contínua para qualidade
 
 ---
 
-## 🧱 Arquitetura MVC
+## 🗂️ Estrutura do Projeto
 
-A aplicação segue a estrutura **Model-View-Controller**, distribuída em:
+Organização baseada em **MVC + módulos auxiliares**:
 
 ```
-
-src/
-├── controllers/
-├── models/         # Prisma ORM
-├── routes/
-├── services/
-├── server.ts       # Entry point
-
+authforge/
+├── prisma/
+│   ├── schema.prisma          # Definição do banco (Prisma)
+│   └── seed.ts                # População inicial
+│
+├── src/
+│   ├── @types/                # Tipagens globais (Request, JWT)
+│   ├── config/                # Configurações (env, segurança)
+│   ├── controllers/           # Lógica de entrada e validação
+│   ├── enum/                  # Enumerações (Role, etc)
+│   ├── lib/                   # Instâncias e integrações (Prisma)
+│   ├── middleware/            # Middlewares (auth, checkRole)
+│   ├── models/                # Acesso direto ao banco (Prisma)
+│   ├── routes/                # Mapeamento de rotas
+│   ├── schemas/               # Validação de inputs (Zod)
+│   ├── services/              # Regras de negócio e lógica
+│   ├── types/                 # Tipos auxiliares
+│   └── utils/                 # Funções utilitárias
+│
+├── server.ts                 # Arquivo principal
+├── Dockerfile
+├── docker-compose.yml
+├── .env.example
 ```
 
 ---
 
-## 🔐 Funcionalidades da API
+## 🔐 Funcionalidades
 
-### 📌 Autenticação
-- `POST /sign-in`: Login e geração de token
-- `POST /sign-out`: Cadastro de novo usuário (email, senha, endereço, telefone, RG, data de nascimento)
+### 🔑 Autenticação
+- `POST /sign-in` → Login e retorno de JWT
+- `DELETE /logout` → Remove cookie de autenticação
+- `GET /me` → Dados do usuário autenticado
 
-### 👤 Usuários
-- `GET /users`: Listagem de todos os usuários (admin)
-- `GET /users/:id`: Buscar usuário pelo ID (admin)
-- `POST /users`: Criar novo usuário (admin)
-- `PUT /users/:id`: Atualizar usuário (admin)
-- `PUT /me`: Usuário atualiza seus próprios dados
+### 👤 Gestão de Usuários
+- `GET /users` → Listagem (apenas admin)
+- `GET /users/:id` → Usuário por ID (admin)
+- `POST /admin` → Criar novo usuário (admin)
+- `PATCH /admin/:id` → Editar usuário (admin)
+- `DELETE /admin/:id` → Remover usuário (admin)
 
-🛡️ Cargos: `admin` e `user` (com controle de permissões)
+### 🛡️ Permissões
+- Verificação por middleware `checkRole`
+- Dois papéis: `ADMIN` e `USER`
 
 ---
 
-## 📑 Documentação da API
+## 📜 Documentação Swagger
 
-Acesse a documentação interativa no Swagger em:
+Disponível automaticamente em:
 
 ```
-
-[http://localhost:3333/docs](http://localhost:3333/docs)
-
-````
-
----
-
-## 📜 Scripts
-
-```json
-"scripts": {
-  "build": "tsc --project tsconfig.json",
-  "start": "node dist/server.js",
-  "start:dev": "tsx --watch src/server.ts",
-  "lint": "eslint src --ext .ts --fix",
-  "format": "prettier --check --ignore-path .gitignore .",
-  "format:fix": "prettier --write --ignore-path .gitignore .",
-  "seed": "tsx prisma/seed.ts"
-}
-````
-
----
-
-## ▶️ Primeiros passos
-
-O login com a conta de administrador de exemplo pode ser feito após usar o comando
-
+http://localhost:3333/docs
 ```
-pnpm seed
-````
-
-As credenciais dessa conta são:
-- `EMAIL`: JohnDoe@example.com
-- `PASSWORD`: abcd1234
 
 ---
 
 ## 🐳 Rodando com Docker
 
-### 1. Configure seu `.env` com base no `.env.example`
+> ⚠️ Antes de iniciar, certifique-se de que o **PostgreSQL local** não está ocupando a **porta 5432**.  
+> Caso esteja, **encerre o serviço** pelo Gerenciador de Tarefas (procure por `postgres`) para evitar conflitos com o container do Docker.
 
-### 2. Inicie os containers:
+### Passos:
 
 ```bash
+# 1. Configure seu arquivo .env com base em .env.example
+
+# 2. Suba os containers com:
 docker-compose up --build
+```
+
+Após isso, a API estará disponível em:
+
+```
+http://localhost:3333
 ```
 
 ---
 
 ## 💻 Rodando Localmente (sem Docker)
 
-### Instale as dependências:
-
 ```bash
+# Instalar dependências
 pnpm install
-```
 
-### Execute em modo desenvolvimento:
+# Gerar estrutura do banco de dados
+pnpm prisma migrate dev
 
-```bash
+# Rodar em modo desenvolvimento
 pnpm start:dev
 ```
 
-### Compilação para produção:
+### Produção
 
 ```bash
 pnpm build
@@ -131,29 +128,59 @@ pnpm start
 
 ---
 
-## ✅ Requisitos
+## 🌱 Conta de Administrador de Teste
 
-* Node.js `>= 18.18.0`
-* PNPM `>= 9.6.0`
-* PostgreSQL local ou via Docker
-* Prisma configurado (`pnpm prisma migrate dev`)
+Execute o seed para cadastrar um administrador:
+
+```bash
+pnpm seed
+```
+
+- ✉️ Email: `JohnDoe@example.com`  
+- 🔒 Senha: `abcd1234`
 
 ---
 
-## ⚙️ CI com GitHub Actions
+## 📜 Scripts
 
-Este projeto utiliza **CI automática** via GitHub Actions para verificar:
+```json
+"scripts": {
+  "build": "tsup src --out-dir build",
+  "start": "node dist/server.js",
+  "start:dev": "tsx --watch src/server.ts",
+  "seed": "tsx prisma/seed.ts",
+  "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+  "format": "prettier --check --ignore-path .gitignore .",
+  "format:fix": "prettier --write --ignore-path .gitignore ."
+}
+```
 
-* Formatação com Prettier
-* Análise estática com ESLint
-* Compilação com TypeScript
+---
+
+## ⚙️ Integração Contínua
+
+CI configurada com GitHub Actions para:
+
+- ✅ Lint com **ESLint**
+- ✅ Formatação com **Prettier**
+- ✅ Compilação com **TypeScript (`tsup`)**
 
 Arquivo de workflow: `.github/workflows/ci.yml`
 
 ---
 
-## 📜 Autoria
+## ✅ Requisitos
 
-Este projeto foi idealizado e desenvolvido por **Adler Castro**. Todos os direitos reservados.
+- Node.js `>= 18.18.0`
+- PNPM `>= 9.6.0`
+- PostgreSQL local ou via Docker
+- Prisma instalado (`pnpm prisma generate`)
+
+---
+
+## 📜 Licença e Autoria
+
+Este projeto foi idealizado e desenvolvido por **Adler Castro**.  
+Todos os direitos reservados.
 
 > Desenvolvido por Adler Castro 🧠🚀
