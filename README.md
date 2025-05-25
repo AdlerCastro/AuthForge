@@ -62,8 +62,9 @@ authforge/
 - `GET /me` → Dados do usuário autenticado
 
 ### 👤 Gestão de Usuários
-- `GET /users` → Listagem (apenas admin)
-- `GET /users/:id` → Usuário por ID (admin)
+- `GET /users` → Listagem
+- `GET /users/:id` → Usuário por ID
+- `PATCH /users/:id` → Editar o próprio usuário
 - `POST /admin` → Criar novo usuário (admin)
 - `PATCH /admin/:id` → Editar usuário (admin)
 - `DELETE /admin/:id` → Remover usuário (admin)
