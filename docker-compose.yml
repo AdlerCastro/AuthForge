@@ -22,5 +22,29 @@ services:
       dockerfile: Dockerfile
     ports:
       - '3333:3333'
+
+  frontend:
+    container_name: authforge-frontend
+    build:
+      context: ../authforge-frontend
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    depends_on:
+      - backend
+    environment:
+      - API_URL=http://backend:3333
+
+  portainer:
+    image: portainer/portainer-ce
+    container_name: portainer
+    restart: unless-stopped
+    ports:
+      - '9000:9000'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+
 volumes:
   db:
+  portainer_data:
