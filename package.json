@@ -9,7 +9,7 @@
     "start": "node build/server.js",
     "start:dev": "tsx --watch src/server.ts",
     "docker:migrate": "docker exec -it authforge-backend-1 pnpm prisma migrate deploy",
-    "docker:seed": "docker exec -it authforge-backend pnpm seed",
+    "docker:seed": "docker exec -it authforge-backend-1 pnpm seed",
     "seed": "tsx prisma/seed.ts",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "format": "prettier --check --ignore-path .gitignore .",
