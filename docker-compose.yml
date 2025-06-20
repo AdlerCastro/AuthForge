@@ -15,7 +15,7 @@ services:
     depends_on:
       - db
     image: authforge-backend
-    command: ['pnpm', 'start:dev']
+    command: ['pnpm', 'start']
     build:
       context: .
       dockerfile: Dockerfile
