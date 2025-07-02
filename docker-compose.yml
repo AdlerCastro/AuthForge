@@ -2,6 +2,7 @@ services:
   db:
     container_name: authforge-db
     image: bitnami/postgresql
+    restart: always
     ports:
       - '5432:5432'
     environment:
@@ -10,12 +11,16 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
     volumes:
       - ./apps/postgres:/var/lib/postgresql/data
+    networks:
+      - authforge-network
 
   backend:
     depends_on:
       - db
     image: authforge-backend
+    container_name: authforge-backend
     command: ['pnpm', 'start']
+    restart: always
     build:
       context: .
       dockerfile: Dockerfile
@@ -31,18 +36,23 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
+    networks:
+      - authforge-network
 
   frontend:
     container_name: authforge-frontend
     build:
       context: ../authforge-frontend
       dockerfile: Dockerfile
+    restart: always
     ports:
       - '3000:3000'
     depends_on:
       - backend
     environment:
       - API_URL=http://backend:3333
+    networks:
+      - authforge-network
 
   portainer:
     image: portainer/portainer-ce
@@ -53,7 +63,13 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer_data:/data
+    networks:
+      - authforge-network
 
 volumes:
   db:
   portainer_data:
+
+networks:
+  authforge-network:
+    driver: bridge
