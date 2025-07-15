@@ -1,7 +1,7 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
 
 export const logoutController = {
-  logout: async (req: FastifyRequest, res: FastifyReply) => {
+  logout: async (_: FastifyRequest, res: FastifyReply) => {
     res.clearCookie('access_token');
 
     return res.status(200).send({

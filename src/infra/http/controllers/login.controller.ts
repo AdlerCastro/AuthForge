@@ -1,8 +1,9 @@
-import { env } from '@/config/env.config';
+import { UserPayload } from '@/core/types/userPayload';
+import { LoginUseCase } from '@/domain/user/use-cases/login.case';
+import { env } from '@/infra/config/env.config';
+import { BcryptHasher } from '@/infra/cryptography/bcrypt.hasher';
+import { PrismaUserRepository } from '@/infra/database/prisma/user.repository';
 import { loginSchema } from '@/schemas/login.schema';
-import { loginService } from '@/services/login.service';
-import { User } from '@/types/user.type';
-
 import { FastifyReply, FastifyRequest } from 'fastify';
 
 export const loginController = {
@@ -10,34 +11,21 @@ export const loginController = {
     try {
       const { email, password } = loginSchema.parse(req.body);
 
-      const user = await loginService.getByEmail({ email });
-      if (!user) {
-        return res.status(401).send({
-          success: false,
-          message: 'Usuário não encontrado',
-        });
-      }
-
-      const isPasswordValid = await loginService.comparePassword(
-        password,
-        user.password_hash,
+      const loginUseCase = new LoginUseCase(
+        new PrismaUserRepository(),
+        new BcryptHasher(),
       );
 
-      if (!isPasswordValid) {
-        return res.status(401).send({
-          success: false,
-          message: 'Senha inválida',
-        });
-      }
+      const { user } = await loginUseCase.execute({ email, password });
 
-      const payload: User = {
+      const UserPayloaded: UserPayload = {
         id: user.id,
         name: user.name,
         email: user.email,
         role: user.role,
       };
 
-      const token = req.jwt.sign(payload);
+      const token = req.jwt.sign(UserPayloaded);
 
       return res
         .status(201)
