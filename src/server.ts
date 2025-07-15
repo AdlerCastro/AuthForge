@@ -5,15 +5,15 @@ import { registerZodCompiler } from './utils/zodCompiler';
 import fastifySwagger from '@fastify/swagger';
 import fastifySwaggerUi from '@fastify/swagger-ui';
 import { jsonSchemaTransform } from 'fastify-type-provider-zod';
-import { userRoutes } from '@/routes/user.routes';
-import { env } from './config/env.config';
-import { adminRoutes } from './routes/admin.routes';
+import { userRoutes } from '@/infra/http/routes/user.routes';
+import { env } from './infra/config/env.config';
+import { adminRoutes } from './infra/http/routes/admin.routes';
 import fastifyJwt from '@fastify/jwt';
 import fCookie from '@fastify/cookie';
 import { Authenticate } from './middleware/authenticate';
-import { loginRoute } from './routes/login.route';
-import { logoutRoute } from './routes/logout.route';
-import { meRoute } from './routes/me.route';
+import { loginRoute } from './infra/http/routes/login.route';
+import { logoutRoute } from './infra/http/routes/logout.route';
+import { meRoute } from './infra/http/routes/me.route';
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
