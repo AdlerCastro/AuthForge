@@ -1,4 +1,4 @@
-import { adminController } from '@/controllers/admin.controller';
+import { adminController } from '@/infra/http/controllers/admin.controller';
 import { checkRole } from '@/middleware/checkRole';
 import { registerSchema } from '@/schemas/register.schema';
 import {

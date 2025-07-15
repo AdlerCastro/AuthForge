@@ -1,4 +1,4 @@
-import { loginController } from '@/controllers/login.controller';
+import { loginController } from '@/infra/http/controllers/login.controller';
 import { loginSchema } from '@/schemas/login.schema';
 import {
   errorResponseSchema,

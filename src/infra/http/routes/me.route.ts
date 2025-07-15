@@ -1,4 +1,4 @@
-import { meController } from '@/controllers/me.controller';
+import { meController } from '@/infra/http/controllers/me.controller';
 import { errorResponseSchema } from '@/schemas/response.schema';
 import { PublicUserResponseSchema } from '@/schemas/user.schema';
 import { FastifyTypeInstance } from '@/types/fastifyInstance.type';

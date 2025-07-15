@@ -1,4 +1,4 @@
-import { logoutController } from '@/controllers/logout.controller';
+import { logoutController } from '@/infra/http/controllers/logout.controller';
 import {
   errorResponseSchema,
   successResponseSchema,
