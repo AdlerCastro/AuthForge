@@ -1,14 +1,29 @@
+import { Role } from '@/core/enum/role.enum';
+import { CreateUserUseCase } from '@/domain/user/use-cases/createUser.case';
+import { DeleteUserUseCase } from '@/domain/user/use-cases/deleteUser.case';
+import { UpdateUserUseCase } from '@/domain/user/use-cases/updateUser.case';
+import { BcryptHasher } from '@/infra/cryptography/bcrypt.hasher';
+import { PrismaUserRepository } from '@/infra/database/prisma/user.repository';
 import { registerSchema } from '@/schemas/register.schema';
 import { updateSchema } from '@/schemas/update.schema';
-import { adminService } from '@/services/admin.service';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
 export const adminController = {
   create: async (req: FastifyRequest, res: FastifyReply) => {
     try {
-      const data = registerSchema.parse(req.body);
+      const parsedData = registerSchema.parse(req.body);
 
-      await adminService.create(data);
+      const data = {
+        ...parsedData,
+        role: Role[parsedData.role],
+      };
+
+      const createUsesUseCase = new CreateUserUseCase(
+        new PrismaUserRepository(),
+        new BcryptHasher(),
+      );
+
+      await createUsesUseCase.execute(data);
 
       return res.status(201).send({
         success: true,
@@ -34,9 +49,21 @@ export const adminController = {
     }
 
     try {
-      const data = updateSchema.parse(req.body);
+      const parsedData = updateSchema.parse(req.body);
+      const data = {
+        ...parsedData,
+        role: parsedData.role !== undefined ? Role[parsedData.role] : undefined,
+      };
 
-      await adminService.update(id, data);
+      const updateUserUseCase = new UpdateUserUseCase(
+        new PrismaUserRepository(),
+        new BcryptHasher(),
+      );
+
+      await updateUserUseCase.execute({
+        id,
+        ...data,
+      });
 
       return res.status(200).send({
         success: true,
@@ -62,7 +89,11 @@ export const adminController = {
     }
 
     try {
-      await adminService.delete(id);
+      const deleteUserUseCase = new DeleteUserUseCase(
+        new PrismaUserRepository(),
+      );
+
+      await deleteUserUseCase.execute(id);
 
       return res.status(200).send({
         success: true,
