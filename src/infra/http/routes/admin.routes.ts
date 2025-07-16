@@ -1,5 +1,5 @@
 import { adminController } from '@/infra/http/controllers/admin.controller';
-import { checkRole } from '@/middleware/checkRole';
+import { checkRole } from '@/infra/http/middlewares/checkRole';
 import { registerSchema } from '@/schemas/register.schema';
 import {
   successResponseSchema,
