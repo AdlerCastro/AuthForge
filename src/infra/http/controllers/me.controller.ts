@@ -1,10 +1,13 @@
-import { userService } from '@/services/user.service';
+import { UsersUseCase } from '@/domain/user/use-cases/users';
+import { PrismaUserRepository } from '@/infra/database/prisma/user.repository';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
 export const meController = {
   getMe: async (req: FastifyRequest, res: FastifyReply) => {
     try {
-      const user = await userService.getById(req.user.id);
+      const userUseCase = new UsersUseCase(new PrismaUserRepository());
+
+      const user = await userUseCase.getById(req.user.id);
 
       if (!user) {
         return res.status(401).send({
