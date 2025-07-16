@@ -1,6 +1,7 @@
 import { Role } from '@/core/enum/role.enum';
 import { UserMapper } from '@/domain/user/mappers/users';
 import { CreateUserUseCase } from '@/domain/user/use-cases/createUser.case';
+import { UpdateUserUseCase } from '@/domain/user/use-cases/updateUser.case';
 import { UsersUseCase } from '@/domain/user/use-cases/users';
 import { BcryptHasher } from '@/infra/cryptography/bcrypt.hasher';
 import { PrismaUserRepository } from '@/infra/database/prisma/user.repository';
@@ -45,11 +46,11 @@ export const userController = {
   },
 
   create: async (req: FastifyRequest, res: FastifyReply) => {
-    const parsed = registerSchema.parse(req.body);
+    const parsedData = registerSchema.parse(req.body);
 
     const data = {
-      ...parsed,
-      role: Role[parsed.role],
+      ...parsedData,
+      role: Role[parsedData.role],
     };
     try {
       const createUserUseCase = new CreateUserUseCase(
@@ -85,12 +86,20 @@ export const userController = {
     }
 
     try {
-      const { name, email, password } = updateSchema.parse(req.body);
+      const parsedBody = updateSchema.parse(req.body);
+      const body = {
+        ...parsedBody,
+        role: parsedBody.role !== undefined ? Role[parsedBody.role] : undefined,
+      };
 
-      await userService.update(id, {
-        name,
-        email,
-        password,
+      const updateUserUseCase = new UpdateUserUseCase(
+        new PrismaUserRepository(),
+        new BcryptHasher(),
+      );
+
+      await updateUserUseCase.execute({
+        id,
+        ...body,
       });
 
       return res.status(201).send({
