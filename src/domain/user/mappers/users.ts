@@ -2,6 +2,7 @@ import { User } from '@/core/entities/user';
 import { PublicUserDTO } from '../dto/publicUser.dto';
 import { randomUUID } from 'crypto';
 import { CreateUserDTO } from '../dto/createUser.dto';
+import { UpdateUserDTO } from '../dto/updateUser.dto';
 
 export class UserMapper {
   static toDTO(user: User): PublicUserDTO {
@@ -30,6 +31,25 @@ export class UserMapper {
       dto.birth_date,
       new Date(),
       passwordHash,
+    );
+  }
+
+  static fromUpdateDTO(
+    dto: UpdateUserDTO,
+    existing: User,
+    passwordHash?: string,
+  ): User {
+    return new User(
+      existing.id,
+      dto.name ?? existing.name,
+      dto.email ?? existing.email,
+      dto.role ?? existing.role,
+      dto.RG ?? existing.RG,
+      dto.phone ?? existing.phone,
+      dto.address ?? existing.address,
+      dto.birth_date ?? existing.birth_date,
+      existing.created_at,
+      passwordHash ?? existing.passwordHash,
     );
   }
 }
